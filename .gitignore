@@ -1,0 +1,37 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+# Godot-specific
+.import/
+.export/
+export.cfg
+export_presets.cfg
+*.godot
+*.import
+*.tmp
+
+# Mono (C#) specific
+.mono/
+data_*/  # compiled C# project files
+mono_crash.*
+
+# Visual Studio/VS Code
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.csproj.user
+
+# Build outputs
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# OS files
+.DS_Store
+Thumbs.db
+

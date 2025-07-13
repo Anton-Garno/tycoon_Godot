@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://dm14385afulxt"]
+
+[ext_resource type="PackedScene" uid="uid://jj3thbyadw5i" path="res://Player.tscn" id="1_f3sb7"]
+[ext_resource type="Script" uid="uid://x6nwh8tt12kr" path="res://World.cs" id="1_fj7yv"]
+[ext_resource type="PackedScene" uid="uid://chy7w74cl1efr" path="res://press.tscn" id="3_aqk2v"]
+[ext_resource type="PackedScene" uid="uid://bj5ew7p3k2oq" path="res://money_status_bar.tscn" id="4_036b0"]
+
+[sub_resource type="Environment" id="Environment_gv5m4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fj7yv"]
+albedo_color = Color(0.462745, 0.619608, 0.670588, 1)
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_fj7yv")
+
+[node name="Terrain" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Terrain"]
+environment = SubResource("Environment_gv5m4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Terrain"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.63841, 0)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Terrain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.701464, 0)
+use_collision = true
+size = Vector3(20, 1, 20)
+material = SubResource("StandardMaterial3D_fj7yv")
+
+[node name="Player" parent="." instance=ExtResource("1_f3sb7")]
+
+[node name="press" parent="." instance=ExtResource("3_aqk2v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.88217, 0, 0)
+
+[node name="MoneyStatusBar" parent="." instance=ExtResource("4_036b0")]
