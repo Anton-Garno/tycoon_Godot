@@ -4,15 +4,16 @@ using System;
 public partial class MoneyStatusBar : Control
 {
 	// Called when the node enters the scene tree for the first time.
-	[Export] public Label moneyLabel;
-	[Export] public PlayerChar player;
+	[Export] public MoneyStatusBar moneyLabel;
+	[Export] public CharacterBody3d player;
 	[Export] public Button pressButton;
     public override void _Ready()
 	{
-		moneyLabel = GetNode<Label>("MoneyLabel");
+		moneyLabel = GetNode<MoneyStatusBar>("MoneyLabel");
 		pressButton = GetNode<Button>("PressButton");
-		player = GetNode<PlayerChar>("../PlayerChar"); // Adjust the path as necessary to find PlayerChar
-		player.MoneyChanged += OnMoneyChanged; // Subscribe to the money changed signal
+		//player = GetNode("") // Adjust the path as necessary to find PlayerChar
+		player = GetNode<CharacterBody3d>("/root/World/Player"); // Adjust the path as necessary to find PlayerChar
+        player.MoneyChanged += OnMoneyChanged; // Subscribe to the money changed signal
 		pressButton.Pressed += OnPressButtonPressed; // Connect the button pressed signal
 		OnMoneyChanged(player.GetMoney()); // Initialize the money label with the current amount
 

@@ -3,7 +3,7 @@ using System;
 
 public partial class World : Node3D
 {
-	[Export] public PlayerChar player;
+	[Export] public CharacterBody3d player;
 	[Export] public Press press;
 	[Export] public MoneyStatusBar moneyStatusBar;
     // Called when the node enters the scene tree for the first time.

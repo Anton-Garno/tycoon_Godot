@@ -4,7 +4,7 @@ using System;
 public partial class Press : Node3D
 {
 	[Export] public AnimationPlayer animationPress;
-	[Export] public PlayerChar player;
+	[Export] public CharacterBody3d player;
 
 	private bool isReady = true;
     public override void _Ready()

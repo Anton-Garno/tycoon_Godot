@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Security.Cryptography.X509Certificates;
 
-public partial class PlayerChar : CharacterBody3D
+public partial class CharacterBody3d : CharacterBody3D
 {
 	public const float Speed = 5.0f;
 	public const float JumpVelocity = 4.5f;
@@ -28,7 +28,12 @@ public partial class PlayerChar : CharacterBody3D
 		// As good practice, you should replace UI actions with custom gameplay actions.
 		Vector2 inputDir = Input.GetVector("left", "right", "forward", "back");
 		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-		if (direction != Vector3.Zero)
+		if (Input.IsActionPressed("run"))
+		{
+			direction *= 2; // Double the speed when running
+			Console.WriteLine("Running: " + direction);
+        }
+        if (direction != Vector3.Zero)
 		{
 			velocity.X = direction.X * Speed;
 			velocity.Z = direction.Z * Speed;

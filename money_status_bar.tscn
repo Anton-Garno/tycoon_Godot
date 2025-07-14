@@ -25,6 +25,7 @@ offset_left = 9.0
 offset_top = 71.0
 offset_right = 194.0
 offset_bottom = 125.0
+text = "Press this to get money"
 script = ExtResource("2_4kon2")
 
 [node name="TextureRect" type="TextureRect" parent="."]
