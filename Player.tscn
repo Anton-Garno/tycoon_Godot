@@ -19,4 +19,10 @@ mesh = SubResource("CapsuleMesh_4xowi")
 shape = SubResource("CapsuleShape3D_a202f")
 
 [node name="Camera3D" type="Camera3D" parent="PlayerChar"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15594, 2.30871)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.670202, -0.551749)
+
+[node name="RayCast3D" type="RayCast3D" parent="PlayerChar/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.166838, -0.985984, 0, 0.985984, 0.166838, 0, -0.0462611, -0.551535)
+target_position = Vector3(0, -1.63, 0)
+collide_with_areas = true
+debug_shape_custom_color = Color(0.709804, 0, 0.882353, 1)

@@ -4,16 +4,20 @@ using System.Security.Cryptography.X509Certificates;
 
 public partial class CharacterBody3d : CharacterBody3D
 {
-	public const float Speed = 5.0f;
+	[Export] private Camera3D camera; // Reference to the camera node
+    private float rotation_x = 0.0f; // Variable to store the vertical rotation of the camera
+    public const float Speed = 5.0f;
 	public const float JumpVelocity = 4.5f;
-	public int money { get; private set; } = 0;
+	public float sensitivity = 1.0f; // Sensitivity for mouse movement
+
+    public int money { get; private set; } = 0;
     public override void _PhysicsProcess(double delta)
 	{
 		Vector3 velocity = Velocity;
-		
+        
 
-		// Add the gravity.
-		if (!IsOnFloor())
+        // Add the gravity.
+        if (!IsOnFloor())
 		{
 			velocity += GetGravity() * (float)delta;
 		}
@@ -52,13 +56,22 @@ public partial class CharacterBody3d : CharacterBody3D
 		// Initialize any necessary properties or states here.
 		base._Ready();
 		GD.Print("CharacterBody3d is ready.");
+		
     }
-    public override void _UnhandledInput(InputEvent @event)
+public override void _UnhandledInput(InputEvent @event)
     {
+        if (@event is InputEventMouseMotion motionEvent)
+        {
+            RotateY(-motionEvent.Relative.X * sensitivity * 0.01f);
 
-        base._UnhandledInput(@event);
+            rotation_x -= motionEvent.Relative.Y * sensitivity * 2f;
+            rotation_x = Mathf.Clamp(rotation_x, -50, 60);
+
+            camera.RotationDegrees = new Vector3(rotation_x, camera.RotationDegrees.Y, camera.RotationDegrees.Z);
+        }
     }
-	public void AddMoney(int amount)
+
+    public void AddMoney(int amount)
 	{
 		money += amount;
 		EmitSignal("MoneyChanged", money);
