@@ -1,43 +1,51 @@
 using Godot;
 using System;
-using System.Security.Cryptography.X509Certificates;
 
 public partial class CharacterBody3d : CharacterBody3D
 {
 	[Export] private Camera3D camera; // Reference to the camera node
-    private float rotation_x = 0.0f; // Variable to store the vertical rotation of the camera
-    public const float Speed = 5.0f;
-	public const float JumpVelocity = 4.5f;
-	public float sensitivity = 1.0f; // Sensitivity for mouse movement
+    [Export]  public  float Speed = 5.0f; 
+    [Export]  public  float JumpVelocity = 4.5f;
+    [Export]  public  float mouseSensitivity = 1.0f; 
 
-    public int money { get; private set; } = 0;
+    private float rotation_x = 0.0f;
+    public override void _Ready()
+    {
+        base._Ready();
+        GD.Print("CharacterBody3d is ready.");
+       // Input.MouseMode = Input.MouseModeEnum.Captured; // Capture the mouse for free look
+
+    }
     public override void _PhysicsProcess(double delta)
 	{
 		Vector3 velocity = Velocity;
-        
 
-        // Add the gravity.
-        if (!IsOnFloor())
+
+		// Add the gravity.
+		if (!IsOnFloor())
 		{
 			velocity += GetGravity() * (float)delta;
 		}
 
-		// Handle Jump.
+		if (Input.IsActionJustPressed("esc"))
+		{
+			GetTree().Quit();
+		}
+
 		if (Input.IsActionJustPressed("jump") && IsOnFloor())
 		{
 			velocity.Y = JumpVelocity;
 		}
 
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
 		Vector2 inputDir = Input.GetVector("left", "right", "forward", "back");
 		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+
 		if (Input.IsActionPressed("run"))
 		{
 			direction *= 2; // Double the speed when running
-			Console.WriteLine("Running: " + direction);
-        }
-        if (direction != Vector3.Zero)
+			GD.Print("Running: " + direction);
+		}
+		if (direction != Vector3.Zero)
 		{
 			velocity.X = direction.X * Speed;
 			velocity.Z = direction.Z * Speed;
@@ -51,35 +59,25 @@ public partial class CharacterBody3d : CharacterBody3D
 		Velocity = velocity;
 		MoveAndSlide();
 	}
-	public override void _Ready()
+
+	public override void _UnhandledInput(InputEvent @event)//_UnhandleadInput
 	{
-		// Initialize any necessary properties or states here.
-		base._Ready();
-		GD.Print("CharacterBody3d is ready.");
-		
-    }
-public override void _UnhandledInput(InputEvent @event)
-    {
+		GD.Print("Unh input detected");
         if (@event is InputEventMouseMotion motionEvent)
-        {
-            RotateY(-motionEvent.Relative.X * sensitivity * 0.01f);
+		{
+			RotateY(Mathf.DegToRad(-motionEvent.Relative.X * mouseSensitivity));
 
-            rotation_x -= motionEvent.Relative.Y * sensitivity * 2f;
-            rotation_x = Mathf.Clamp(rotation_x, -50, 60);
+			rotation_x -= motionEvent.Relative.Y * mouseSensitivity;
+			rotation_x = Mathf.Clamp(rotation_x, -60, 60);
+			camera.RotationDegrees = new Vector3(rotation_x,0 ,0 );//camera.RotationDegrees.Y, camera.RotationDegrees.Z
 
-            camera.RotationDegrees = new Vector3(rotation_x, camera.RotationDegrees.Y, camera.RotationDegrees.Z);
+			GD.Print($"Camera rotation:X={motionEvent.Relative.Y}\n Y={motionEvent.Relative.X} " );
+            if (motionEvent.Relative.X != 0 || motionEvent.Relative.Y != 0)
+            {
+                GD.Print("Mouse is moving, camera rotation should update!");
+            }
         }
-    }
 
-    public void AddMoney(int amount)
-	{
-		money += amount;
-		EmitSignal("MoneyChanged", money);
-    }
-	public int GetMoney()
-	{
-		return money;
-    }
-	[Signal] public delegate void MoneyChangedEventHandler(int newAmount);
-    [Signal] public delegate void money_updatedEventHandler(int money);//signal to notify when money is updated
+	}
+
 }

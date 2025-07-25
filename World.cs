@@ -5,7 +5,6 @@ public partial class World : Node3D
 {
 	[Export] public CharacterBody3d player;
 	[Export] public Press press;
-	[Export] public MoneyStatusBar moneyStatusBar;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{

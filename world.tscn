@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dm14385afulxt"]
+[gd_scene load_steps=6 format=3 uid="uid://dm14385afulxt"]
 
 [ext_resource type="PackedScene" uid="uid://jj3thbyadw5i" path="res://Player.tscn" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://x6nwh8tt12kr" path="res://World.cs" id="1_fj7yv"]
 [ext_resource type="PackedScene" uid="uid://chy7w74cl1efr" path="res://press.tscn" id="3_aqk2v"]
-[ext_resource type="PackedScene" uid="uid://bj5ew7p3k2oq" path="res://money_status_bar.tscn" id="4_036b0"]
 
 [sub_resource type="Environment" id="Environment_gv5m4"]
 
@@ -31,5 +30,3 @@ material = SubResource("StandardMaterial3D_fj7yv")
 
 [node name="press" parent="." instance=ExtResource("3_aqk2v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.88217, 0, 0)
-
-[node name="MoneyStatusBar" parent="." instance=ExtResource("4_036b0")]

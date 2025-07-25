@@ -8,9 +8,10 @@
 
 [node name="Player" type="Node3D"]
 
-[node name="PlayerChar" type="CharacterBody3D" parent="."]
+[node name="PlayerChar" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_xhfnw")
+camera = NodePath("Camera3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerChar"]
 mesh = SubResource("CapsuleMesh_4xowi")
