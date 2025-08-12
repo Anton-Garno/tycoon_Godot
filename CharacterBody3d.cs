@@ -1,22 +1,30 @@
 using Godot;
 using System;
+using System.Runtime.CompilerServices;
 
 public partial class CharacterBody3d : CharacterBody3D
 {
-	[Export] private Camera3D camera; // Reference to the camera node
-    [Export]  public  float Speed = 5.0f; 
-    [Export]  public  float JumpVelocity = 4.5f;
-    [Export]  public  float mouseSensitivity = 1.0f; 
+	[Export] private Camera3D camera;
+	[Export] private RayCast3D interactRay;
 
-    private float rotation_x = 0.0f;
-    public override void _Ready()
-    {
-        base._Ready();
-        GD.Print("CharacterBody3d is ready.");
-       // Input.MouseMode = Input.MouseModeEnum.Captured; // Capture the mouse for free look
+	[Export] public float Speed = 5.0f;
+	[Export] public float JumpVelocity = 4.5f;
 
-    }
-    public override void _PhysicsProcess(double delta)
+	[Export] public float mouseSensitivity = 1.0f;
+
+	private float rotation_x = 0.0f;
+	public override void _Ready()
+	{
+		Input.MouseMode = Input.MouseModeEnum.Captured;
+
+		if (interactRay == null)
+			interactRay = GetNodeOrNull<RayCast3D>("Camera3D/RayCast3D"); // підхопити за шляхом
+
+		if (interactRay == null)
+			GD.PushError("interactRay = null. Прив’яжи RayCast3D в інспекторі!");
+
+	}
+	public override void _PhysicsProcess(double delta)
 	{
 		Vector3 velocity = Velocity;
 
@@ -43,9 +51,14 @@ public partial class CharacterBody3d : CharacterBody3D
 		if (Input.IsActionPressed("run"))
 		{
 			direction *= 2; // Double the speed when running
-			GD.Print("Running: " + direction);
 		}
-		if (direction != Vector3.Zero)
+        if (Input.IsActionJustPressed("interact_action"))
+        {
+            TryInteract();
+            GD.Print("Interact action pressed.");//checker
+        }
+
+        if (direction != Vector3.Zero)
 		{
 			velocity.X = direction.X * Speed;
 			velocity.Z = direction.Z * Speed;
@@ -62,22 +75,48 @@ public partial class CharacterBody3d : CharacterBody3D
 
 	public override void _UnhandledInput(InputEvent @event)//_UnhandleadInput
 	{
-		GD.Print("Unh input detected");
-        if (@event is InputEventMouseMotion motionEvent)
+		
+		if (@event is InputEventMouseMotion motionEvent)
 		{
 			RotateY(Mathf.DegToRad(-motionEvent.Relative.X * mouseSensitivity));
 
 			rotation_x -= motionEvent.Relative.Y * mouseSensitivity;
 			rotation_x = Mathf.Clamp(rotation_x, -60, 60);
-			camera.RotationDegrees = new Vector3(rotation_x,0 ,0 );//camera.RotationDegrees.Y, camera.RotationDegrees.Z
+			camera.RotationDegrees = new Vector3(rotation_x, 0, 0);
 
-			GD.Print($"Camera rotation:X={motionEvent.Relative.Y}\n Y={motionEvent.Relative.X} " );
-            if (motionEvent.Relative.X != 0 || motionEvent.Relative.Y != 0)
-            {
-                GD.Print("Mouse is moving, camera rotation should update!");
-            }
-        }
+		}
 
 	}
+	private void TryInteract()
+	{
+		if (interactRay == null) { GD.Print("RayCast не прив’язаний"); return; }
 
+		interactRay.ForceRaycastUpdate();
+		if (!interactRay.IsColliding()) return;
+
+		var hitNode = interactRay.GetCollider() as Node;
+		if (hitNode == null) { GD.Print("Влучили не в Node"); return; }
+		/////////////////////////////////////////////////////
+		
+		// Варіант через групу:
+		if (hitNode.IsInGroup("press_button"))
+		{
+			hitNode.CallDeferred("OnPress");  // викличе метод на вузлі зі скриптом Press
+			GD.Print($"{hitNode.Name} влучено, викликано OnPress через групу 'press_button'.");
+            return;
+
+		}
+
+		// Варіант через тип:
+		if (hitNode is Press p) {
+			p.OnPress(); 
+			return; }
+
+		if (hitNode.GetParent() is Press pp) { 
+			pp.OnPress(); 
+			return; }
+
+		GD.Print($"{hitNode.Name} влучено, але немає Press або групи 'press_button'.");
+
+	}
 }

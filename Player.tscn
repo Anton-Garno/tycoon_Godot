@@ -12,6 +12,7 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_xhfnw")
 camera = NodePath("Camera3D")
+mouseSensitivity = 0.5
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerChar"]
 mesh = SubResource("CapsuleMesh_4xowi")
@@ -23,7 +24,8 @@ shape = SubResource("CapsuleShape3D_a202f")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.670202, -0.551749)
 
 [node name="RayCast3D" type="RayCast3D" parent="PlayerChar/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 0.166838, -0.985984, 0, 0.985984, 0.166838, 0, -0.0462611, -0.551535)
-target_position = Vector3(0, -1.63, 0)
+transform = Transform3D(1, 0, 0, 0, 0.166838, -0.985984, 0, 0.985984, 0.166838, 0, -0.046, -0.552)
+target_position = Vector3(0, -2, 0)
+hit_from_inside = true
 collide_with_areas = true
 debug_shape_custom_color = Color(0.709804, 0, 0.882353, 1)

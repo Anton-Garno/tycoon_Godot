@@ -46,8 +46,9 @@ _data = {
 &"press_move": SubResource("Animation_ghb83")
 }
 
-[node name="press" type="Node3D"]
+[node name="press" type="Node3D" node_paths=PackedStringArray("Anim") groups=["press_button"]]
 script = ExtResource("1_ghb83")
+Anim = NodePath("StaticBody3D/AnimationPlayer")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00772178, 0)
@@ -61,7 +62,7 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.501999, 0)
 shape = SubResource("BoxShape3D_aqkx1")
 
-[node name="AnimationPress" type="AnimationPlayer" parent="StaticBody3D"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="StaticBody3D"]
 root_node = NodePath("../..")
 libraries = {
 &"": SubResource("AnimationLibrary_vd5rt")
